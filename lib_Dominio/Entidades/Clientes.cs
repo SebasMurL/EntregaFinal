@@ -16,7 +16,7 @@ namespace lib_dominio.Entidades
         public string? Telefono { get; set; }
 
         //Envia
-        public List<Pujas> Pujas { get; set; } = new List<Pujas>();
-        public List<Pagos> Pagos { get; set; } = new List<Pagos>();
+        //public List<Pujas> Pujas { get; set; } = new List<Pujas>();
+        //public List<Pagos> Pagos { get; set; } = new List<Pagos>();
     }
 }

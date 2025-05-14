@@ -15,6 +15,6 @@ namespace lib_dominio.Entidades
         public string? Descripcion { get; set; }
 
         //Envia
-        public List<Pagos> Pagos { get; set; } = new List<Pagos>();
+        //public List<Pagos> Pagos { get; set; } = new List<Pagos>();
     }
 }

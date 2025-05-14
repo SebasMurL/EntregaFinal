@@ -7,13 +7,13 @@ CREATE TABLE Clientes (
     Nombre NVARCHAR(100) NOT NULL,
     Cedula NVARCHAR(20) UNIQUE NOT NULL,
     Email NVARCHAR(100) UNIQUE NOT NULL,
-    Telefono NVARCHAR(20) NULL
+    Telefono NVARCHAR(20) NOT NULL
 );
 
 CREATE TABLE Categorias (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,
-    Descripcion NVARCHAR(255) NULL
+    Descripcion NVARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Productos (
@@ -21,8 +21,8 @@ CREATE TABLE Productos (
     Nombre NVARCHAR(100) NOT NULL,
     Descripcion NVARCHAR(255) NULL,
     PrecioInicial DECIMAL(18,2) NOT NULL,
-    ID_Categoria INT NOT NULL,
-    FOREIGN KEY (ID_Categoria) REFERENCES Categorias(ID) ON DELETE CASCADE
+    CategoriasID INT NOT NULL,
+    FOREIGN KEY (CategoriasID) REFERENCES Categorias(ID)
 );
 
 CREATE TABLE Vendedores (
@@ -30,50 +30,56 @@ CREATE TABLE Vendedores (
     Nombre NVARCHAR(100) NOT NULL,
     Cedula NVARCHAR(20) UNIQUE NOT NULL,
     Email NVARCHAR(100) UNIQUE NOT NULL,
-    Telefono NVARCHAR(20) NULL
+    Telefono NVARCHAR(20) NOT NULL
 );
 
 CREATE TABLE Estados (
     ID INT IDENTITY(1,1) PRIMARY KEY,
+	Nombre NVARCHAR(100) NOT NULL,
     Descripcion NVARCHAR(100) NOT NULL
+
 );
 
 CREATE TABLE Subastas (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    ID_Producto INT NOT NULL,
-    ID_Vendedor INT NOT NULL,
-    ID_Estado INT NOT NULL,
-    Fecha_Inicio DATETIME NOT NULL,
-    Fecha_Fin DATETIME NOT NULL,
-    FOREIGN KEY (ID_Producto) REFERENCES Productos(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_Vendedor) REFERENCES Vendedores(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_Estado) REFERENCES Estados(ID) ON DELETE CASCADE
+    ProductosID INT NOT NULL,
+    VendedoresID INT NOT NULL,
+    EstadosID INT NOT NULL,
+	CategoriasID INT NOT NULL,
+    FechaInicio DATETIME NOT NULL,
+    FechaFin DATETIME NOT NULL,
+	FOREIGN KEY (CategoriasID) REFERENCES Categorias(ID),
+    FOREIGN KEY (ProductosID) REFERENCES Productos(ID),
+    FOREIGN KEY (VendedoresID) REFERENCES Vendedores(ID),
+    FOREIGN KEY (EstadosID) REFERENCES Estados(ID)
 );
 
 CREATE TABLE Pujas (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    ID_Cliente INT NOT NULL,
-    ID_Subasta INT NOT NULL,
+    ClientesID INT NOT NULL,
+    SubastasID INT NOT NULL,
     Monto DECIMAL(18,2) NOT NULL,
-    Fecha_Hora DATETIME NOT NULL,
-    FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_Subasta) REFERENCES Subastas(ID) ON DELETE CASCADE
+    Fecha DATETIME NOT NULL,
+    FOREIGN KEY (ClientesID) REFERENCES Clientes(ID),
+    FOREIGN KEY (SubastasID) REFERENCES Subastas(ID)
 );
 
-CREATE TABLE Metodos_Pagos (
+CREATE TABLE MetodosPagos (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    Tipo_Pago NVARCHAR(100) NOT NULL
+    TipoPago NVARCHAR(100) NOT NULL,
+	Nombre NVARCHAR(100) NOT NULL,
+    Descripcion NVARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Pagos (
     ID INT IDENTITY(1,1) PRIMARY KEY,
     Referencia NVARCHAR(100) UNIQUE NOT NULL,
-    ID_Cliente INT NOT NULL,
-    ID_Subasta INT NOT NULL,
-    ID_MetodoPago INT NOT NULL,
-    FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_Subasta) REFERENCES Subastas(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_MetodoPago) REFERENCES Metodos_Pagos(ID) ON DELETE CASCADE
+    ClientesID INT NOT NULL,
+    SubastasID INT NOT NULL,
+    MetodosPagosID INT NOT NULL,
+    FOREIGN KEY (ClientesID) REFERENCES Clientes(ID),
+    FOREIGN KEY (SubastasID) REFERENCES Subastas(ID),
+    FOREIGN KEY (MetodosPagosID) REFERENCES MetodosPagos(ID)
 );
 
 -- Inserción de datos
@@ -91,12 +97,7 @@ CREATE TABLE Pagos (
 		('Deportes', 'Equipamiento deportivo'),
 		('Juguetes', 'Juegos y juguetes');
 
-	INSERT INTO Productos (Nombre, Descripcion, PrecioInicial, ID_Categoria) VALUES
-		('¡Phone', 'Teléfono de última generación', 500.00, 1),
-		('Sofá', 'Sofá de cuero 3 puestos', 800.00, 2),
-		('Camisa', 'Camisa de algodón para hombre', 30.00, 3),
-		('Bicicleta', 'Bicicleta de montaña', 300.00, 4),
-		('Muñeca', 'Muñeca de colección', 25.00, 5);
+
 
 	INSERT INTO Vendedores (Nombre, Cedula, Email, Telefono) VALUES
 		('Luis Martínez', '111222333', 'luis@example.com', '3123456789'),
@@ -105,16 +106,45 @@ CREATE TABLE Pagos (
 		('Elena Ruiz', '123789456', 'elena@example.com', '3446789012'),
 		('Sergio Castro', '987321654', 'sergio@example.com', '3557890123');
 
-	INSERT INTO Estados (Descripcion) VALUES
-		('Activa'),
-		('Finalizada'),
-		('Cancelada'),
-		('Pendiente'),
-		('Suspendida');
+	INSERT INTO Estados (Descripcion,Nombre) VALUES
+		('Activa','A'),
+		('Finalizada','A'),
+		('Cancelada','A'),
+		('Pendiente','A'),
+		('Suspendida','A');
 
-	INSERT INTO Metodos_Pagos (Tipo_Pago) VALUES
-		('Tarjeta'),
-		('PayPal'),
-		('Transferencia bancaria'),
-		('Efectivo'),
-		('Criptomonedas');
+	INSERT INTO MetodosPagos (TipoPago,Nombre,Descripcion) VALUES
+		('Tarjeta','A','A'),
+		('PayPal','A','A'),
+		('Transferencia bancaria','A','A'),
+		('Efectivo','A','A'),
+		('Criptomonedas','A','A');
+
+		SELECT * FROM Clientes;
+		SELECT * FROM Categorias;
+		SELECT * FROM MetodosPagos;
+		SELECT * FROM Vendedores;
+		SELECT * FROM Estados;
+
+		SELECT * FROM Productos;
+
+		SELECT * FROM Subastas;
+
+		SELECT * FROM Pagos; --
+		SELECT * FROM Pujas; --
+		
+		INSERT INTO Productos (Nombre, Descripcion, PrecioInicial,CategoriasID) VALUES
+		('¡Phone', 'Teléfono de última generación', 500.00,1),
+		('Sofá', 'Sofá de cuero 3 puestos', 800.00,2),
+		('Camisa', 'Camisa de algodón para hombre', 30.00,3),
+		('Bicicleta', 'Bicicleta de montaña', 300.00,4),
+		('Muñeca', 'Muñeca de colección', 25.00,5);
+
+		INSERT INTO Subastas(FechaInicio,FechaFin,CategoriasID,EstadosID,VendedoresID,ProductosID)VALUES
+		(GETDATE(),GETDATE(),1,1,1,1)
+		--¿?
+		INSERT INTO Pujas(Monto,Fecha,ClientesID,SubastasID)VALUES
+		(2000,GETDATE(),1,1)
+		INSERT INTO Pagos(Referencia,ClientesID,MetodosPagosID,SubastasID) VALUES
+		('ABC',1,1,1)
+		

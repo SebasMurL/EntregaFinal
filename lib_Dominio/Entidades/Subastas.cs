@@ -24,6 +24,6 @@ namespace lib_dominio.Entidades
         public Categorias? _Categoria { get; set; }
 
         //Envia
-        public List<Pujas> Pujas { get; set; } = new List<Pujas>();
+        //public List<Pujas> Pujas { get; set; } = new List<Pujas>();
     }
 }

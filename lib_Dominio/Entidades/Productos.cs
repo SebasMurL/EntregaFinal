@@ -19,6 +19,6 @@ namespace lib_dominio.Entidades
         public Categorias? _Categoria { get; set; }
 
         //Envia
-        public List<Subastas> Subastas { get; set; } = new List<Subastas>();
+        //public List<Subastas> Subastas { get; set; } = new List<Subastas>();
     }
 }
