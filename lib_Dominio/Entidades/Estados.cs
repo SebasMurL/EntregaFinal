@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace lib_Dominio.Entidades
+namespace lib_dominio.Entidades
 {
     public class Estados
     {
